@@ -1,4 +1,4 @@
-# This workflow will build a golang project
+# This workflow will build a golang project and upload the built binary as an artifact.
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
 name: Go
@@ -10,19 +10,24 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23.1'
 
-    - name: Build
-      run: go build -v ./...
+      - name: Build
+        run: go build -v -o my-app ./...
 
-    - name: Test
-      run: go test -v ./...
+      - name: Test
+        run: go test -v ./...
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: go-binary
+          path: my-app
