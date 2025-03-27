@@ -40,11 +40,12 @@ func (c *CppRunner) Exec(input string, output string) error {
 	cmd.Stdin = strings.NewReader(input)
 	cmdOutput, err := cmd.CombinedOutput()
 	if err != nil {
+		slog.Error(string(cmdOutput))
 		return err
 	}
 
 	outLines := strings.Split(output, "\n")
-	cmdLines := strings.Split(output, "\n")
+	cmdLines := strings.Split(string(cmdOutput), "\n")
 	if len(outLines) != len(cmdLines) {
 		return fmt.Errorf("cpp: want %d output, got %d output", len(outLines), len(cmdLines))
 	}
